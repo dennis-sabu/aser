@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle2, ShieldCheck, Zap, Users, BookOpen, Rocket, Search } from 'lucide-react';
+import { ShieldCheck, Zap, Users, Search, ArrowRight, CheckCircle2, Car, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 
@@ -9,30 +9,50 @@ export const FeaturesSection = () => {
   const features = [
     {
       title: 'Verified Student Network',
-      desc: 'Exclusive access for students with valid college emails. Trust is built-in from the start.',
+      desc: 'Every user is a verified student with a college email. Trust and safety are built in from day one.',
       icon: <ShieldCheck className="w-6 h-6" />,
       delay: '0.1s'
     },
     {
-      title: 'Intelligent Matching',
-      desc: 'Post your needs and let our system find the perfect resource, ride, or skill on your campus.',
+      title: 'Need → Match → Connect',
+      desc: 'Post what you need and our system finds matching resources, rides, or skilled students instantly.',
       icon: <Zap className="w-6 h-6" />,
       delay: '0.2s'
     },
     {
-      title: 'Factual Reputation',
-      desc: 'No more guessing. See real transaction history and ratings for every student you interact with.',
+      title: 'Real Reputation System',
+      desc: 'Ratings built on completed transactions. See exactly who you\'re dealing with before you connect.',
       icon: <Users className="w-6 h-6" />,
       delay: '0.3s'
+    },
+    {
+      title: 'Smart Campus Search',
+      desc: 'Search ESP32, CAD help, or "ride to Kottayam" — results intelligently route to the right people.',
+      icon: <Search className="w-6 h-6" />,
+      delay: '0.4s'
+    },
+    {
+      title: 'Campus Ride Sharing',
+      desc: 'Find or create rides between campus and city. Split costs, reduce travel time, travel safely.',
+      icon: <Car className="w-6 h-6" />,
+      delay: '0.5s'
+    },
+    {
+      title: 'Student Skill Exchange',
+      desc: 'Need Flutter help? PCB design? Connect with classmates who have exactly the skill you need.',
+      icon: <Lightbulb className="w-6 h-6" />,
+      delay: '0.6s'
     }
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section id="features" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <div style={{ opacity: 0, animationDelay: '0.1s' }} className="animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-normal tracking-tight mb-4">Everything you need, <br />right on your campus.</h2>
+            <h2 className="text-4xl md:text-5xl font-normal tracking-tight mb-4">
+              Everything you need,<br />right on your campus.
+            </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               A unified ecosystem designed to eliminate the friction of student life.
               Share resources, find rides, and swap skills effortlessly.
@@ -40,8 +60,8 @@ export const FeaturesSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((f, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((f) => (
             <div
               key={f.title}
               style={{ opacity: 0, animationDelay: f.delay }}
@@ -64,20 +84,40 @@ export const FeaturesSection = () => {
 
 export const HowItWorksSection = () => {
   const steps = [
-    { step: '01', title: 'Post a Need', desc: 'Say "I need an ESP32" or "Need a ride to downtown".', icon: <SearchIcon /> },
-    { step: '02', title: 'Get Matched', desc: 'We find students who have exactly what you need.', icon: <ZapIcon /> },
-    { step: '03', title: 'Connect & Share', desc: 'Coordinate via chat and meet on campus to exchange.', icon: <UsersIcon /> },
-    { step: '04', title: 'Build Trust', desc: 'Confirm the handover and update your campus reputation.', icon: <CheckCircle2 className="w-6 h-6" /> },
+    {
+      step: '01',
+      title: 'Post a Need',
+      desc: 'Say "I need an ESP32" or "Need a ride to Ernakulam tomorrow." Takes 30 seconds.',
+      icon: <Search className="w-6 h-6" />
+    },
+    {
+      step: '02',
+      title: 'Get Matched',
+      desc: 'We find verified students nearby who have exactly what you\'re looking for.',
+      icon: <Zap className="w-6 h-6" />
+    },
+    {
+      step: '03',
+      title: 'Connect & Share',
+      desc: 'Coordinate via campus chat. Meet on campus to exchange, borrow, or ride together.',
+      icon: <Users className="w-6 h-6" />
+    },
+    {
+      step: '04',
+      title: 'Review & Build Trust',
+      desc: 'Mark complete and leave a review. Your campus reputation grows with every interaction.',
+      icon: <CheckCircle2 className="w-6 h-6" />
+    },
   ];
 
   return (
-    <section className="py-24 bg-gray-50">
+    <section id="how-it-works" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <div style={{ opacity: 0, animationDelay: '0.1s' }} className="animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-normal tracking-tight mb-4">How it works</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              From a simple request to a completed exchange, we've streamlined the entire process.
+              From a simple request to a completed exchange — streamlined in four steps.
             </p>
           </div>
         </div>
@@ -100,12 +140,24 @@ export const HowItWorksSection = () => {
             </div>
           ))}
         </div>
+
+        {/* Core flow pill */}
+        <div
+          style={{ opacity: 0, animationDelay: '0.7s' }}
+          className="animate-fade-in-up mt-20 flex items-center justify-center gap-3 flex-wrap"
+        >
+          {['Need', 'Match', 'Connect', 'Share'].map((label, i, arr) => (
+            <React.Fragment key={label}>
+              <span className="bg-black text-white text-sm font-medium px-5 py-2 rounded-full">
+                {label}
+              </span>
+              {i < arr.length - 1 && (
+                <ArrowRight className="w-4 h-4 text-gray-400" />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
-
-// Small internal icons to avoid extra imports
-const SearchIcon = () => <Search className="w-6 h-6" />;
-const ZapIcon = () => <Zap className="w-6 h-6" />;
-const UsersIcon = () => <Users className="w-6 h-6" />;

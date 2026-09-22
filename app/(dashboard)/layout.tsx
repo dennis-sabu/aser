@@ -1,61 +1,104 @@
-'use client';
+import React from 'react';
+import Link from 'next/link';
+import { Bell, Network, MessageSquare, User, LogOut, Shield } from 'lucide-react';
+import { createClientServer } from '@/lib/supabase-server';
+import { signOut } from '@/app/actions/auth';
+import { MobileMenuWrapper } from '@/app/(dashboard)/MobileMenuWrapper';
+import { isAdmin } from '@/lib/admin';
 
-import React, { useState } from 'react';
-import { Search, Bell, User, Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClientServer();
+  const { data: { user } } = await supabase.auth.getUser();
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userIsAdmin = isAdmin(user);
+  const displayName = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Student';
+  const initials = displayName
+    .split(' ')
+    .map((n: string) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <a href="/" className="text-lg font-bold tracking-tight">CampusNet</a>
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <Network className="w-4 h-4 text-black flex-shrink-0" />
+              <span className="text-base font-bold tracking-tight">CampusNet</span>
+            </Link>
 
-            <div className="hidden md:flex items-center gap-6">
-              <a href="/resources" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">Resources</a>
-              <a href="/requests" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">I Need</a>
-              <a href="/rides" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">Rides</a>
-              <a href="/skills" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">Skills</a>
+            <div className="hidden md:flex items-center gap-1">
+              <Link href="/dashboard/resources" className="px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all">Resources</Link>
+              <Link href="/dashboard/requests" className="px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all">I Need</Link>
+              <Link href="/dashboard/rides" className="px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all">Rides</Link>
+              <Link href="/dashboard/skills" className="px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all">Skills</Link>
+              <Link href="/dashboard/chat" className="px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5" />
+                Chat
+              </Link>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-600 hover:text-black transition-colors relative">
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            {userIsAdmin && (
+              <Link
+                href="/admin/dashboard"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-black text-white text-xs font-semibold rounded-full hover:bg-gray-800 transition-colors shadow-sm"
+                title="Open Admin Portal"
+              >
+                <Shield className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Admin</span>
+              </Link>
+            )}
+
+            <button className="p-2 text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all relative">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-orange-500 rounded-full border-2 border-white" />
             </button>
-            <div className="h-8 w-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
-              <User className="w-5 h-5 text-gray-500" />
-            </div>
-            <button
-              className="md:hidden p-2 text-gray-600"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+
+            <Link
+              href="/dashboard/profile"
+              className="p-2 text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all"
+              title="Profile"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              <User className="w-5 h-5" />
+            </Link>
+
+            {/* User avatar + sign out (desktop) */}
+            <div className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
+                  {initials}
+                </div>
+                <span className="font-medium text-gray-800 max-w-[120px] truncate">{displayName}</span>
+              </div>
+              <form action={signOut}>
+                <button
+                  type="submit"
+                  title="Sign out"
+                  className="flex items-center gap-1.5 px-4 py-1.5 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              </form>
+            </div>
+
+            {/* Mobile hamburger */}
+            <MobileMenuWrapper
+              isAdmin={userIsAdmin}
+              userName={displayName}
+              userEmail={user?.email}
+              userInitials={initials}
+            />
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-16 md:hidden animate-fade-in-overlay">
-          <div className="flex flex-col p-6 gap-6">
-            <a href="/resources" className="text-lg font-medium py-2 border-b border-gray-100">Resources</a>
-            <a href="/requests" className="text-lg font-medium py-2 border-b border-gray-100">I Need</a>
-            <a href="/rides" className="text-lg font-medium py-2 border-b border-gray-100">Rides</a>
-            <a href="/skills" className="text-lg font-medium py-2 border-b border-gray-100">Skills</a>
-            <a href="/profile" className="text-lg font-medium py-2">My Profile</a>
-          </div>
-        </div>
-      )}
-
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {children}
       </main>
     </div>

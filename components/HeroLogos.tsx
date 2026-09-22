@@ -1,22 +1,27 @@
 import React from 'react';
 
-const LOGOS = [
-  { name: 'INTERSCOPE', style: 'font-bold tracking-widest' },
-  { name: 'SPOTIFY', style: 'font-black italic' },
-  { name: 'Nexera', style: 'font-medium' },
-  { name: 'M3', style: 'font-serif italic font-bold' },
-  { name: 'LAURA COLE', style: 'font-light tracking-tighter' },
-  { name: 'vertex', style: 'font-semibold' },
+const PARTNERS = [
+  { name: 'Kerala University', style: 'font-semibold tracking-wide' },
+  { name: 'MG University', style: 'font-bold' },
+  { name: 'Calicut University', style: 'font-medium tracking-tight' },
+  { name: 'APJ Abdul Kalam', style: 'font-light tracking-widest text-xs' },
+  { name: 'CUSAT', style: 'font-black' },
+  { name: 'NIT Calicut', style: 'font-semibold italic' },
 ];
 
 export const HeroLogos = () => {
   return (
-    <div className="mt-24 mb-12 flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale">
-      {LOGOS.map((logo) => (
-        <span key={logo.name} className={`text-sm md:text-base text-gray-600 ${logo.style}`}>
-          {logo.name}
-        </span>
-      ))}
+    <div className="mt-24 mb-12">
+      <p className="text-center text-xs text-gray-400 tracking-widest uppercase mb-8">
+        Trusted across campuses
+      </p>
+      <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale">
+        {PARTNERS.map((p) => (
+          <span key={p.name} className={`text-sm md:text-base text-gray-600 ${p.style}`}>
+            {p.name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };

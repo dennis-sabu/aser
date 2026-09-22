@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { BarChart3, BookOpen, Users, Rocket } from 'lucide-react';
+import { ShoppingBag, HelpCircle, Car, Lightbulb } from 'lucide-react';
 
 interface Tab {
   id: string;
@@ -9,10 +9,10 @@ interface Tab {
 }
 
 const TABS: Tab[] = [
-  { id: 'analyse', label: 'Analyse', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'train', label: 'Train', icon: <BookOpen className="w-4 h-4" /> },
-  { id: 'testing', label: 'Testing', icon: <Users className="w-4 h-4" /> },
-  { id: 'deploy', label: 'Deploy', icon: <Rocket className="w-4 h-4" /> },
+  { id: 'resources', label: 'Resources', icon: <ShoppingBag className="w-4 h-4" /> },
+  { id: 'needs', label: 'I Need', icon: <HelpCircle className="w-4 h-4" /> },
+  { id: 'rides', label: 'Rides', icon: <Car className="w-4 h-4" /> },
+  { id: 'skills', label: 'Skills', icon: <Lightbulb className="w-4 h-4" /> },
 ];
 
 interface HeroTabBarProps {
