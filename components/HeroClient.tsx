@@ -1,27 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { HeroContent } from './HeroContent';
 import { HeroTabBar } from './HeroTabBar';
-import { HeroVideoSection } from './HeroVideoSection';
+import { HeroShowcaseSection } from './HeroShowcaseSection';
 import { HeroLogos } from './HeroLogos';
 import { FeaturesSection, HowItWorksSection } from './LandingDetails';
 
 export const HeroClient = () => {
   const [activeTab, setActiveTab] = useState('resources');
-
-  useEffect(() => {
-    const tabs = ['resources', 'needs', 'rides', 'skills'];
-    const interval = setInterval(() => {
-      setActiveTab((prev) => {
-        const currentIndex = tabs.indexOf(prev);
-        const nextIndex = (currentIndex + 1) % tabs.length;
-        return tabs[nextIndex];
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>
@@ -35,7 +22,7 @@ export const HeroClient = () => {
         </div>
 
         <div style={{ opacity: 0, animationDelay: '0.4s' }} className="animate-fade-in-up">
-          <HeroVideoSection activeTab={activeTab} />
+          <HeroShowcaseSection activeTab={activeTab} />
         </div>
 
         <div style={{ opacity: 0, animationDelay: '0.5s' }} className="animate-fade-in-up">

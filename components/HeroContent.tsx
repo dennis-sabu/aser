@@ -11,7 +11,7 @@ export const HeroContent = () => {
         <span className="text-sm font-medium text-black">Verified Student-Only Platform</span>
       </div>
 
-      <h1 className="text-6xl md:text-7xl lg:text-[80px] font-normal leading-[1.1] tracking-tight mb-5 text-black">
+      <h1 className="text-6xl md:text-7xl lg:text-[80px] font-semibold leading-[1.1] tracking-tight mb-5 text-black">
         Your Campus.<br />
         <span className="gradient-text">
           Everything You Need.
