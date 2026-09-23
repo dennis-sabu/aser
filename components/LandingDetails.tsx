@@ -9,36 +9,42 @@ export const FeaturesSection = () => {
   const features = [
     {
       title: 'Verified Student Network',
+      highlight: 'Verified',
       desc: 'Every user is a verified student with a college email. Trust and safety are built in from day one.',
       icon: <ShieldCheck className="w-6 h-6" />,
       delay: '0.1s'
     },
     {
       title: 'Need → Match → Connect',
+      highlight: 'Match',
       desc: 'Post what you need and our system finds matching resources, rides, or skilled students instantly.',
       icon: <Zap className="w-6 h-6" />,
       delay: '0.2s'
     },
     {
       title: 'Real Reputation System',
+      highlight: 'Reputation',
       desc: 'Ratings built on completed transactions. See exactly who you\'re dealing with before you connect.',
       icon: <Users className="w-6 h-6" />,
       delay: '0.3s'
     },
     {
       title: 'Smart Campus Search',
+      highlight: 'Search',
       desc: 'Search ESP32, CAD help, or "ride to Kottayam" — results intelligently route to the right people.',
       icon: <Search className="w-6 h-6" />,
       delay: '0.4s'
     },
     {
       title: 'Campus Ride Sharing',
+      highlight: 'Ride',
       desc: 'Find or create rides between campus and city. Split costs, reduce travel time, travel safely.',
       icon: <Car className="w-6 h-6" />,
       delay: '0.5s'
     },
     {
       title: 'Student Skill Exchange',
+      highlight: 'Skill',
       desc: 'Need Flutter help? PCB design? Connect with classmates who have exactly the skill you need.',
       icon: <Lightbulb className="w-6 h-6" />,
       delay: '0.6s'
@@ -67,11 +73,27 @@ export const FeaturesSection = () => {
               style={{ opacity: 0, animationDelay: f.delay }}
               className="animate-fade-in-up"
             >
-              <Card className="p-8 h-full hover:border-gray-300 transition-all group">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition-colors">
-                  {f.icon}
+              <Card className="relative h-full overflow-hidden p-8 transition-all group hover:-translate-y-1 hover:border-gray-300 hover:shadow-xl">
+                <div className="mb-7 h-24 overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 via-white to-gray-100 p-3 transition-transform duration-500 group-hover:scale-[1.03]">
+                  <div className="flex h-full items-end justify-between rounded-xl border border-white bg-white/70 p-3 shadow-sm backdrop-blur">
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-950 text-white shadow-lg">
+                        {f.icon}
+                      </div>
+                      <div className="space-y-1">
+                        <span className="block h-1.5 w-20 rounded-full bg-gray-200" />
+                        <span className="block h-1.5 w-12 rounded-full bg-gray-100" />
+                      </div>
+                    </div>
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{f.title}</h3>
+                <h3 className="mb-3 text-xl font-semibold">{f.title.split(f.highlight).map((part, index, parts) => (
+                  <React.Fragment key={`${f.title}-${index}`}>
+                    {part}
+                    {index < parts.length - 1 && <span className="rounded-md bg-yellow-100 px-1 text-gray-950">{f.highlight}</span>}
+                  </React.Fragment>
+                ))}</h3>
                 <p className="text-gray-600 leading-relaxed">{f.desc}</p>
               </Card>
             </div>

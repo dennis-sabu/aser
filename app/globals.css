@@ -109,6 +109,24 @@ body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes logoCloudIncoming {
+  from { opacity: 0; filter: blur(8px); transform: translateX(20px); }
+  to { opacity: 1; filter: blur(0); transform: translateX(0); }
+}
+
+@keyframes logoCloudOutgoing {
+  from { opacity: 1; filter: blur(0); transform: translateX(0); }
+  to { opacity: 0; filter: blur(8px); transform: translateX(-20px); }
+}
+
+.logo-cloud-incoming {
+  animation: logoCloudIncoming 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.logo-cloud-outgoing {
+  animation: logoCloudOutgoing 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .animate-showcase-copy,
 .animate-showcase-panel {
   animation: showcaseIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;

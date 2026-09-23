@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowUpRight,
-  CalendarDays,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   MapPin,
   MessageCircle,
-  Sparkles,
   Users,
 } from 'lucide-react';
 
@@ -68,6 +68,22 @@ const SHOWCASE_CONTENT = {
 
 export const HeroShowcaseSection = ({ activeTab }: HeroShowcaseSectionProps) => {
   const content = SHOWCASE_CONTENT[activeTab as keyof typeof SHOWCASE_CONTENT] ?? SHOWCASE_CONTENT.resources;
+  const [activeCard, setActiveCard] = useState(0);
+
+  useEffect(() => {
+    setActiveCard(0);
+  }, [activeTab]);
+
+  const moveCard = (direction: 1 | -1) => {
+    setActiveCard((current) => (current + direction + content.cards.length) % content.cards.length);
+  };
+
+  const getCardOffset = (index: number) => {
+    const rawOffset = index - activeCard;
+    if (rawOffset > 1) return rawOffset - content.cards.length;
+    if (rawOffset < -1) return rawOffset + content.cards.length;
+    return rawOffset;
+  };
 
   return (
     <section className="px-6 pb-20" aria-live="polite">
@@ -75,8 +91,8 @@ export const HeroShowcaseSection = ({ activeTab }: HeroShowcaseSectionProps) => 
         <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/[0.08] blur-3xl" />
         <div className="pointer-events-none absolute bottom-[-8rem] left-1/3 h-72 w-72 rounded-full bg-blue-400/[0.12] blur-3xl" />
 
-        <div className="relative grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div className="max-w-xl animate-showcase-copy">
+        <div className="relative grid min-w-0 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12">
+          <div className="min-w-0 max-w-xl animate-showcase-copy">
             <div className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
               <span className={`h-2 w-2 rounded-full ${content.accent}`} />
               {content.eyebrow}
@@ -89,24 +105,60 @@ export const HeroShowcaseSection = ({ activeTab }: HeroShowcaseSectionProps) => 
             </div>
           </div>
 
-          <div className="relative animate-showcase-panel rounded-2xl border border-white/10 bg-white/[0.08] p-4 shadow-2xl backdrop-blur-xl sm:p-5">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-gray-900"><Sparkles className="h-5 w-5" /></div>
-                <div><p className="text-sm font-semibold">Live on CampusNet</p><p className="text-xs text-gray-400">Updated just now</p></div>
+          <div className="relative min-w-0 animate-showcase-panel rounded-2xl border border-white/10 bg-white/[0.08] p-4 shadow-2xl backdrop-blur-xl sm:p-5">
+            <div className="flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold">Live on CampusNet</p>
+                <p className="text-xs text-gray-400">Swipe through what is happening nearby</p>
               </div>
               <button type="button" aria-label={content.action} className="group inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-gray-300 transition hover:bg-white/10 hover:text-white">{content.action}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></button>
             </div>
-            <div className="space-y-3 pt-4">
-              {content.cards.map((card, index) => (
-                <div key={card.title} className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/10 p-3 transition hover:translate-x-1 hover:bg-white/10" style={{ animationDelay: `${index * 100}ms` }}>
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold ${card.color}`}>{card.person}</div>
-                  <div className="min-w-0 flex-1"><p className="truncate text-sm font-medium text-white">{card.title}</p><p className="mt-1 truncate text-xs text-gray-400">{card.meta}</p></div>
-                  <MessageCircle className="h-4 w-4 shrink-0 text-gray-500" />
-                </div>
-              ))}
+            <div className="relative mt-5 h-[300px] overflow-hidden sm:h-[330px]">
+              {content.cards.map((card, index) => {
+                const offset = getCardOffset(index);
+                const isActive = offset === 0;
+
+                return (
+                  <article
+                    key={card.title}
+                    aria-hidden={!isActive}
+                    className={`absolute inset-y-0 w-[82%] max-w-[310px] rounded-2xl border p-5 transition-all duration-500 ease-out sm:w-[72%] ${
+                      isActive
+                        ? 'border-white/25 bg-white/[0.16] shadow-2xl shadow-black/30'
+                        : 'border-white/10 bg-black/20 opacity-35 blur-[1px]'
+                    }`}
+                    style={{
+                      left: `${50 + offset * 44}%`,
+                      transform: `translateX(-50%) scale(${isActive ? 1 : 0.88})`,
+                      zIndex: isActive ? 3 : 1,
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className={`flex h-11 w-11 items-center justify-center rounded-xl text-xs font-bold ${card.color}`}>{card.person}</div>
+                      <MessageCircle className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <div className="mt-16 sm:mt-20">
+                      <p className="text-lg font-semibold leading-tight text-white">{card.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-gray-400">{card.meta}</p>
+                    </div>
+                    <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between border-t border-white/10 pt-4 text-xs text-gray-400">
+                      <span>{isActive ? 'Available now' : 'Campus listing'}</span>
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-            <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-xs text-gray-400"><span className="inline-flex items-center gap-2"><Users className="h-4 w-4" /> 248 active students</span><span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" /> This week</span></div>
+            <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-4 text-xs text-gray-400">
+              <span className="inline-flex items-center gap-2"><Users className="h-4 w-4" /> 248 active students</span>
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => moveCard(-1)} aria-label="Previous card" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 transition hover:bg-white/10 hover:text-white"><ChevronLeft className="h-4 w-4" /></button>
+                <div className="flex items-center gap-1.5 px-2">
+                  {content.cards.map((card, index) => <button key={card.title} type="button" onClick={() => setActiveCard(index)} aria-label={`Show ${card.title}`} className={`h-1.5 rounded-full transition-all ${index === activeCard ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/60'}`} />)}
+                </div>
+                <button type="button" onClick={() => moveCard(1)} aria-label="Next card" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 transition hover:bg-white/10 hover:text-white"><ChevronRight className="h-4 w-4" /></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
